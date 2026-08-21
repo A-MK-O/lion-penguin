@@ -277,19 +277,6 @@ async function sendEvent(data) {
 
 
 
-loveLetterButton.addEventListener(
-  "click",
-  async () => {
-
-    const from =
-      selectedPet;
-
-    const to =
-      from === "lion"
-        ? "penguin"
-        : "lion";
-
-
 function animateLoveLetter(
   fromName,
   toName
@@ -371,3 +358,61 @@ function animateLoveLetter(
   );
 
 }
+
+
+
+loveLetterButton.addEventListener(
+  "click",
+  async () => {
+
+    const from =
+      selectedPet;
+
+    const to =
+      from === "lion"
+        ? "penguin"
+        : "lion";
+
+
+    animateLoveLetter(
+      from,
+      to
+    );
+
+
+    statusText.textContent =
+      "Sending love letter...";
+
+
+    try {
+
+      const result =
+        await sendEvent({
+
+          type:
+            "loveLetter",
+
+          from:
+            from,
+
+          to:
+            to
+
+        });
+
+
+      statusText.textContent =
+        `💌 ${result.letter}`;
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      statusText.textContent =
+        "The love letter got lost :(";
+
+    }
+
+  }
+);
