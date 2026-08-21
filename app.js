@@ -48,3 +48,41 @@ function movePetRandomly(petName) {
     travelTime + 1000 + Math.random() * 2000
   );
 }
+
+function placePet(petName, xPercent, yPercent) {
+
+  const pet = pets[petName];
+
+  const x =
+    (world.clientWidth - pet.offsetWidth)
+    * xPercent;
+
+  const y =
+    (world.clientHeight - pet.offsetHeight)
+    * yPercent;
+
+
+  pet.style.transition = "none";
+
+  pet.style.transform =
+    `translate(${x}px, ${y}px)`;
+
+
+  // force browser to apply the position
+  pet.offsetHeight;
+
+
+  pet.style.transition =
+    "transform 3s linear";
+}
+
+
+placePet("lion", 0.2, 0.55);
+placePet("penguin", 0.7, 0.4);
+
+
+setTimeout(() => {
+  movePetRandomly("lion");
+  movePetRandomly("penguin");
+}, 500);
+
