@@ -534,3 +534,70 @@ function schedulePetVisit() {
 
 
 schedulePetVisit();
+
+
+function wait(ms) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
+}
+
+
+function showHeartBetweenPets() {
+
+  const lionRect =
+    pets.lion.getBoundingClientRect();
+
+  const penguinRect =
+    pets.penguin.getBoundingClientRect();
+
+  const worldRect =
+    world.getBoundingClientRect();
+
+
+  const heart =
+    document.createElement("div");
+
+  heart.className =
+    "meeting-heart";
+
+  heart.textContent =
+    "❤️";
+
+
+  const lionCenterX =
+    lionRect.left + lionRect.width / 2;
+
+  const penguinCenterX =
+    penguinRect.left + penguinRect.width / 2;
+
+
+  const middleX =
+    (lionCenterX + penguinCenterX) / 2
+    - worldRect.left;
+
+
+  const middleY =
+    Math.min(
+      lionRect.top,
+      penguinRect.top
+    )
+    - worldRect.top
+    - 25;
+
+
+  heart.style.left =
+    `${middleX}px`;
+
+  heart.style.top =
+    `${middleY}px`;
+
+
+  world.appendChild(heart);
+
+
+  setTimeout(() => {
+    heart.remove();
+  }, 2500);
+}
+
