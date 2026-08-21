@@ -86,3 +86,52 @@ setTimeout(() => {
   movePetRandomly("penguin");
 }, 500);
 
+const selectedName =
+  document.querySelector("#selected-name");
+
+const loveLetterButton =
+  document.querySelector("#love-letter");
+
+function selectPet(petName) {
+
+  selectedPet = petName;
+
+
+  Object.values(pets).forEach(pet => {
+    pet.classList.remove("selected");
+  });
+
+
+  pets[petName].classList.add("selected");
+
+
+  const displayName =
+    petName === "lion"
+      ? "Lion"
+      : "Penguin";
+
+
+  const otherName =
+    petName === "lion"
+      ? "Penguin"
+      : "Lion";
+
+
+  selectedName.textContent =
+    displayName;
+
+
+  loveLetterButton.textContent =
+    `💌 ${displayName} → ${otherName}`;
+}
+
+pets.lion.addEventListener(
+  "click",
+  () => selectPet("lion")
+);
+
+pets.penguin.addEventListener(
+  "click",
+  () => selectPet("penguin")
+);
+
