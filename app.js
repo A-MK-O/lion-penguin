@@ -601,3 +601,48 @@ function showHeartBetweenPets() {
   }, 2500);
 }
 
+function wait(ms) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
+}
+
+
+function showHeartBetweenPets() {
+  // heart code
+}
+
+
+function schedulePetVisit() {
+
+  const delay =
+    10000 + Math.random() * 10000;
+
+  setTimeout(async () => {
+
+    const lionVisits =
+      Math.random() < 0.5;
+
+    if (lionVisits) {
+
+      await petVisitsPet(
+        "lion",
+        "penguin"
+      );
+
+    } else {
+
+      await petVisitsPet(
+        "penguin",
+        "lion"
+      );
+
+    }
+
+    schedulePetVisit();
+
+  }, delay);
+}
+
+
+schedulePetVisit();
