@@ -416,3 +416,140 @@ loveLetterButton.addEventListener(
 
   }
 );
+
+
+async function lionVisitsPenguin() {
+
+  if (
+    busyPets.has("lion") ||
+    busyPets.has("penguin")
+  ) {
+    return;
+  }
+
+  busyPets.add("lion");
+  busyPets.add("penguin");
+
+  clearTimeout(roamTimers.lion);
+  clearTimeout(roamTimers.penguin);
+
+  const lion = pets.lion;
+  const penguin = pets.penguin;
+
+  const worldRect =
+    world.getBoundingClientRect();
+
+  const penguinRect =
+    penguin.getBoundingClientRect();
+
+  const lionWidth =
+    lion.offsetWidth;
+
+  const lionHeight =
+    lion.offsetHeight;
+
+  let targetX =
+    penguinRect.left
+    - worldRect.left
+    - lionWidth
+    + 25;
+
+  let targetY =
+    penguinRect.top
+    - worldRect.top;
+
+  targetX =
+    Math.max(
+      0,
+      Math.min(
+        targetX,
+        world.clientWidth - lionWidth
+      )
+    );
+
+  targetY =
+    Math.max(
+      0,
+      Math.min(
+        targetY,
+        world.clientHeight - lionHeight
+      )
+    );
+
+  lion.style.transitionDuration =
+    "2s";
+
+  lion.style.transform =
+    `translate(${targetX}px, ${targetY}px)`;
+
+  await wait(2100);
+
+  showHeartBetweenPets();
+
+  await wait(3000);
+
+  busyPets.delete("lion");
+  busyPets.delete("penguin");
+
+  movePetRandomly("lion");
+  movePetRandomly("penguin");
+}
+
+
+function showHeartBetweenPets() {
+
+  const lionRect =
+    pets.lion.getBoundingClientRect();
+
+  const penguinRect =
+    pets.penguin.getBoundingClientRect();
+
+  const worldRect =
+    world.getBoundingClientRect();
+
+  const heart =
+    document.createElement("div");
+
+  heart.className =
+    "meeting-heart";
+
+  heart.textContent =
+    "❤️";
+
+  const middleX =
+    (
+      lionRect.left
+      + lionRect.width / 2
+      + penguinRect.left
+      + penguinRect.width / 2
+    ) / 2
+    - worldRect.left;
+
+  const middleY =
+    Math.min(
+      lionRect.top,
+      penguinRect.top
+    )
+    - worldRect.top
+    - 20;
+
+  heart.style.left =
+    `${middleX}px`;
+
+  heart.style.top =
+    `${middleY}px`;
+
+  world.appendChild(heart);
+
+  setTimeout(
+    () => heart.remove(),
+    2500
+  );
+}
+
+
+function wait(ms) {
+  return new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
+}
