@@ -290,45 +290,84 @@ loveLetterButton.addEventListener(
         : "lion";
 
 
-    animateLoveLetter(
-      from,
-      to
-    );
+function animateLoveLetter(
+  fromName,
+  toName
+) {
+
+  const fromPet =
+    pets[fromName];
+
+  const toPet =
+    pets[toName];
 
 
-    statusText.textContent =
-      "Sending love letter...";
+  const worldRect =
+    world.getBoundingClientRect();
+
+  const fromRect =
+    fromPet.getBoundingClientRect();
+
+  const toRect =
+    toPet.getBoundingClientRect();
 
 
-    try {
+  const letter =
+    document.createElement("div");
 
-      const result =
-        await sendEvent({
+  letter.className =
+    "flying-letter";
 
-          type:
-            "loveLetter",
-
-          from:
-            from,
-
-          to:
-            to
-
-        });
+  letter.textContent =
+    "💌";
 
 
-      statusText.textContent =
-        `💌 ${result.letter}`;
+  const startX =
+    fromRect.left
+    - worldRect.left
+    + fromRect.width / 2;
+
+  const startY =
+    fromRect.top
+    - worldRect.top
+    + fromRect.height / 2;
 
 
-    } catch (error) {
+  const endX =
+    toRect.left
+    - worldRect.left
+    + toRect.width / 2;
 
-      console.error(error);
+  const endY =
+    toRect.top
+    - worldRect.top
+    + toRect.height / 2;
 
-      statusText.textContent =
-        "The love letter got lost :(";
 
-    }
+  letter.style.left =
+    `${startX}px`;
 
-  }
-);
+  letter.style.top =
+    `${startY}px`;
+
+
+  world.appendChild(letter);
+
+
+  requestAnimationFrame(() => {
+
+    letter.style.transform =
+      `translate(
+        ${endX - startX}px,
+        ${endY - startY}px
+      )`;
+
+  });
+
+
+  setTimeout(
+    () => letter.remove(),
+    1400
+  );
+
+}
