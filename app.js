@@ -132,8 +132,5 @@ pets.lion.addEventListener(
 
 pets.penguin.addEventListener(
   "click",
-  () => {
-    alert("PENGUIN CLICKED");
-    selectPet("penguin");
-  }
+  () => selectPet("penguin")
 );
