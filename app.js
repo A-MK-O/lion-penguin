@@ -173,3 +173,28 @@ function performAction(petName, action) {
   }, actionDurations[action]);
 }
 
+const statusText =
+  document.querySelector("#status");
+
+
+document
+  .querySelectorAll("[data-action]")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const action =
+          button.dataset.action;
+
+        performAction(
+          selectedPet,
+          action
+        );
+
+      }
+    );
+
+  });
+
