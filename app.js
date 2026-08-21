@@ -183,18 +183,97 @@ document
 
     button.addEventListener(
       "click",
-      () => {
+      async () => {
 
         const action =
           button.dataset.action;
 
+        const pet =
+          selectedPet;
+
+
         performAction(
-          selectedPet,
+          pet,
           action
         );
+
+
+        statusText.textContent =
+          "Sending update...";
+
+
+        try {
+
+          const result =
+            await sendEvent({
+
+              type:
+                "activity",
+
+              pet:
+                pet,
+
+              action:
+                action
+
+            });
+
+
+          statusText.textContent =
+            result.content;
+
+
+        } catch (error) {
+
+          console.error(error);
+
+          statusText.textContent =
+            "Something went wrong.";
+
+        }
 
       }
     );
 
   });
+
+
+const API_URL =
+  "https://lion-penguin-api.YOURACCOUNT.workers.dev";
+
+
+async function sendEvent(data) {
+
+  const response =
+    await fetch(
+      API_URL,
+      {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(data)
+
+      }
+    );
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      "Server request failed"
+    );
+
+  }
+
+
+  return await response.json();
+}
+
+
 
