@@ -134,3 +134,42 @@ pets.penguin.addEventListener(
   "click",
   () => selectPet("penguin")
 );
+
+const actionDurations = {
+  treat: 1400,
+  workout: 1800,
+  email: 2000,
+  pet: 1400
+};
+
+function performAction(petName, action) {
+
+  const pet = pets[petName];
+
+
+  busyPets.add(petName);
+
+
+  clearTimeout(
+    roamTimers[petName]
+  );
+
+
+  pet.classList.add(
+    `action-${action}`
+  );
+
+
+  setTimeout(() => {
+
+    pet.classList.remove(
+      `action-${action}`
+    );
+
+    busyPets.delete(petName);
+
+    movePetRandomly(petName);
+
+  }, actionDurations[action]);
+}
+
