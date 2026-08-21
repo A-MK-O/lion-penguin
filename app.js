@@ -10,6 +10,15 @@ let selectedPet = "lion";
 const roamTimers = {};
 const busyPets = new Set();
 
+const API_URL =
+  "https://lion-penguin-api.alicja-kowalska1996.workers.dev";
+
+
+
+// --------------------------------------------------
+// RANDOM WANDERING
+// --------------------------------------------------
+
 function movePetRandomly(petName) {
 
   if (busyPets.has(petName)) {
@@ -24,17 +33,14 @@ function movePetRandomly(petName) {
   const maxY =
     world.clientHeight - pet.offsetHeight;
 
-
   const randomX =
     Math.random() * maxX;
 
   const randomY =
     Math.random() * maxY;
 
-
   const travelTime =
     2000 + Math.random() * 2500;
-
 
   pet.style.transitionDuration =
     `${travelTime}ms`;
@@ -42,14 +48,19 @@ function movePetRandomly(petName) {
   pet.style.transform =
     `translate(${randomX}px, ${randomY}px)`;
 
-
   roamTimers[petName] = setTimeout(
     () => movePetRandomly(petName),
     travelTime + 1000 + Math.random() * 2000
   );
 }
 
-function placePet(petName, xPercent, yPercent) {
+
+
+function placePet(
+  petName,
+  xPercent,
+  yPercent
+) {
 
   const pet = pets[petName];
 
@@ -61,30 +72,36 @@ function placePet(petName, xPercent, yPercent) {
     (world.clientHeight - pet.offsetHeight)
     * yPercent;
 
-
   pet.style.transition = "none";
 
   pet.style.transform =
     `translate(${x}px, ${y}px)`;
 
-
-  // force browser to apply the position
   pet.offsetHeight;
-
 
   pet.style.transition =
     "transform 3s linear";
 }
 
 
+
 placePet("lion", 0.2, 0.55);
 placePet("penguin", 0.7, 0.4);
 
 
+
 setTimeout(() => {
+
   movePetRandomly("lion");
   movePetRandomly("penguin");
+
 }, 500);
+
+
+
+// --------------------------------------------------
+// SELECTING PETS
+// --------------------------------------------------
 
 const selectedName =
   document.querySelector("#selected-name");
@@ -92,38 +109,39 @@ const selectedName =
 const loveLetterButton =
   document.querySelector("#love-letter");
 
+const statusText =
+  document.querySelector("#status");
+
+
+
 function selectPet(petName) {
 
   selectedPet = petName;
-
 
   Object.values(pets).forEach(pet => {
     pet.classList.remove("selected");
   });
 
-
   pets[petName].classList.add("selected");
-
 
   const displayName =
     petName === "lion"
       ? "Lion"
       : "Penguin";
 
-
   const otherName =
     petName === "lion"
       ? "Penguin"
       : "Lion";
 
-
   selectedName.textContent =
     displayName;
-
 
   loveLetterButton.textContent =
     `💌 ${displayName} → ${otherName}`;
 }
+
+
 
 pets.lion.addEventListener(
   "click",
@@ -135,6 +153,12 @@ pets.penguin.addEventListener(
   () => selectPet("penguin")
 );
 
+
+
+// --------------------------------------------------
+// ACTIVITY ANIMATIONS
+// --------------------------------------------------
+
 const actionDurations = {
   treat: 1400,
   workout: 1800,
@@ -142,23 +166,24 @@ const actionDurations = {
   pet: 1400
 };
 
-function performAction(petName, action) {
+
+
+function performAction(
+  petName,
+  action
+) {
 
   const pet = pets[petName];
 
-
   busyPets.add(petName);
-
 
   clearTimeout(
     roamTimers[petName]
   );
 
-
   pet.classList.add(
     `action-${action}`
   );
-
 
   setTimeout(() => {
 
@@ -173,9 +198,45 @@ function performAction(petName, action) {
   }, actionDurations[action]);
 }
 
-const statusText =
-  document.querySelector("#status");
 
+
+// --------------------------------------------------
+// API
+// --------------------------------------------------
+
+async function sendEvent(data) {
+
+  const response =
+    await fetch(
+      API_URL,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(data)
+      }
+    );
+
+  if (!response.ok) {
+
+    throw new Error(
+      "Server request failed"
+    );
+  }
+
+  return await response.json();
+}
+
+
+
+// --------------------------------------------------
+// ACTIVITY BUTTONS
+// --------------------------------------------------
 
 document
   .querySelectorAll("[data-action]")
@@ -191,37 +252,25 @@ document
         const pet =
           selectedPet;
 
-
         performAction(
           pet,
           action
         );
 
-
         statusText.textContent =
           "Sending update...";
-
 
         try {
 
           const result =
             await sendEvent({
-
-              type:
-                "activity",
-
-              pet:
-                pet,
-
-              action:
-                action
-
+              type: "activity",
+              pet: pet,
+              action: action
             });
-
 
           statusText.textContent =
             result.content;
-
 
         } catch (error) {
 
@@ -229,53 +278,16 @@ document
 
           statusText.textContent =
             "Something went wrong.";
-
         }
-
       }
     );
-
   });
 
 
-const API_URL =
-  "https://lion-penguin-api.alicja-kowalska1996.workers.dev";
 
-
-async function sendEvent(data) {
-
-  const response =
-    await fetch(
-      API_URL,
-      {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
-
-        body:
-          JSON.stringify(data)
-
-      }
-    );
-
-
-  if (!response.ok) {
-
-    throw new Error(
-      "Server request failed"
-    );
-
-  }
-
-
-  return await response.json();
-}
-
-
+// --------------------------------------------------
+// LOVE LETTER ANIMATION
+// --------------------------------------------------
 
 function animateLoveLetter(
   fromName,
@@ -288,7 +300,6 @@ function animateLoveLetter(
   const toPet =
     pets[toName];
 
-
   const worldRect =
     world.getBoundingClientRect();
 
@@ -298,7 +309,6 @@ function animateLoveLetter(
   const toRect =
     toPet.getBoundingClientRect();
 
-
   const letter =
     document.createElement("div");
 
@@ -307,7 +317,6 @@ function animateLoveLetter(
 
   letter.textContent =
     "💌";
-
 
   const startX =
     fromRect.left
@@ -319,7 +328,6 @@ function animateLoveLetter(
     - worldRect.top
     + fromRect.height / 2;
 
-
   const endX =
     toRect.left
     - worldRect.left
@@ -330,16 +338,13 @@ function animateLoveLetter(
     - worldRect.top
     + toRect.height / 2;
 
-
   letter.style.left =
     `${startX}px`;
 
   letter.style.top =
     `${startY}px`;
 
-
   world.appendChild(letter);
-
 
   requestAnimationFrame(() => {
 
@@ -348,18 +353,19 @@ function animateLoveLetter(
         ${endX - startX}px,
         ${endY - startY}px
       )`;
-
   });
-
 
   setTimeout(
     () => letter.remove(),
     1400
   );
-
 }
 
 
+
+// --------------------------------------------------
+// LOVE LETTER BUTTON
+// --------------------------------------------------
 
 loveLetterButton.addEventListener(
   "click",
@@ -373,37 +379,25 @@ loveLetterButton.addEventListener(
         ? "penguin"
         : "lion";
 
-
     animateLoveLetter(
       from,
       to
     );
 
-
     statusText.textContent =
       "Sending love letter...";
-
 
     try {
 
       const result =
         await sendEvent({
-
-          type:
-            "loveLetter",
-
-          from:
-            from,
-
-          to:
-            to
-
+          type: "loveLetter",
+          from: from,
+          to: to
         });
-
 
       statusText.textContent =
         `💌 ${result.letter}`;
-
 
     } catch (error) {
 
@@ -411,14 +405,20 @@ loveLetterButton.addEventListener(
 
       statusText.textContent =
         "The love letter got lost :(";
-
     }
-
   }
 );
 
 
-async function petVisitsPet(visitorName, targetName) {
+
+// --------------------------------------------------
+// PET VISITS
+// --------------------------------------------------
+
+async function petVisitsPet(
+  visitorName,
+  targetName
+) {
 
   if (
     busyPets.has(visitorName) ||
@@ -430,11 +430,19 @@ async function petVisitsPet(visitorName, targetName) {
   busyPets.add(visitorName);
   busyPets.add(targetName);
 
-  clearTimeout(roamTimers[visitorName]);
-  clearTimeout(roamTimers[targetName]);
+  clearTimeout(
+    roamTimers[visitorName]
+  );
 
-  const visitor = pets[visitorName];
-  const target = pets[targetName];
+  clearTimeout(
+    roamTimers[targetName]
+  );
+
+  const visitor =
+    pets[visitorName];
+
+  const target =
+    pets[targetName];
 
   const worldRect =
     world.getBoundingClientRect();
@@ -449,6 +457,10 @@ async function petVisitsPet(visitorName, targetName) {
     visitor.offsetHeight;
 
 
+
+  // Try to stand on the left side
+  // of the target.
+
   let targetX =
     targetRect.left
     - worldRect.left
@@ -459,6 +471,22 @@ async function petVisitsPet(visitorName, targetName) {
     targetRect.top
     - worldRect.top;
 
+
+
+  // If there isn't enough space
+  // on the left, stand on the right.
+
+  if (targetX < 0) {
+
+    targetX =
+      targetRect.right
+      - worldRect.left
+      - 25;
+  }
+
+
+
+  // Keep visitor inside the world.
 
   targetX =
     Math.max(
@@ -479,6 +507,7 @@ async function petVisitsPet(visitorName, targetName) {
     );
 
 
+
   visitor.style.transitionDuration =
     "2s";
 
@@ -486,62 +515,37 @@ async function petVisitsPet(visitorName, targetName) {
     `translate(${targetX}px, ${targetY}px)`;
 
 
+
+  // Give the visitor time to arrive.
+
   await wait(2100);
 
+
+
   showHeartBetweenPets();
+
+
+
+  // Hang out together.
 
   await wait(3000);
 
 
+
   busyPets.delete(visitorName);
   busyPets.delete(targetName);
+
+
 
   movePetRandomly(visitorName);
   movePetRandomly(targetName);
 }
 
 
-function schedulePetVisit() {
 
-  const delay =
-    10000 + Math.random() * 10000;
-
-  setTimeout(async () => {
-
-    const lionVisits =
-      Math.random() < 0.5;
-
-    if (lionVisits) {
-
-      await petVisitsPet(
-        "lion",
-        "penguin"
-      );
-
-    } else {
-
-      await petVisitsPet(
-        "penguin",
-        "lion"
-      );
-
-    }
-
-    schedulePetVisit();
-
-  }, delay);
-}
-
-
-schedulePetVisit();
-
-
-function wait(ms) {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
-}
-
+// --------------------------------------------------
+// HEART
+// --------------------------------------------------
 
 function showHeartBetweenPets() {
 
@@ -554,7 +558,6 @@ function showHeartBetweenPets() {
   const worldRect =
     world.getBoundingClientRect();
 
-
   const heart =
     document.createElement("div");
 
@@ -564,18 +567,20 @@ function showHeartBetweenPets() {
   heart.textContent =
     "❤️";
 
-
   const lionCenterX =
-    lionRect.left + lionRect.width / 2;
+    lionRect.left
+    + lionRect.width / 2;
 
   const penguinCenterX =
-    penguinRect.left + penguinRect.width / 2;
-
+    penguinRect.left
+    + penguinRect.width / 2;
 
   const middleX =
-    (lionCenterX + penguinCenterX) / 2
+    (
+      lionCenterX
+      + penguinCenterX
+    ) / 2
     - worldRect.left;
-
 
   const middleY =
     Math.min(
@@ -585,38 +590,48 @@ function showHeartBetweenPets() {
     - worldRect.top
     - 25;
 
-
   heart.style.left =
     `${middleX}px`;
 
   heart.style.top =
     `${middleY}px`;
 
-
   world.appendChild(heart);
-
 
   setTimeout(() => {
     heart.remove();
   }, 2500);
 }
 
+
+
+// --------------------------------------------------
+// SMALL WAIT HELPER
+// --------------------------------------------------
+
 function wait(ms) {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
+
+  return new Promise(
+    resolve => {
+      setTimeout(resolve, ms);
+    }
+  );
 }
 
 
-function showHeartBetweenPets() {
-  // heart code
-}
 
+// --------------------------------------------------
+// RANDOM VISIT SCHEDULER
+// --------------------------------------------------
 
 function schedulePetVisit() {
 
+  // During testing:
+  // wait randomly between 10 and 20 seconds.
+
   const delay =
-    10000 + Math.random() * 10000;
+    10000
+    + Math.random() * 10000;
 
   setTimeout(async () => {
 
@@ -636,13 +651,13 @@ function schedulePetVisit() {
         "penguin",
         "lion"
       );
-
     }
 
     schedulePetVisit();
 
   }, delay);
 }
+
 
 
 schedulePetVisit();
