@@ -239,7 +239,7 @@ document
 
 
 const API_URL =
-  "https://lion-penguin-api.YOURACCOUNT.workers.dev";
+  "https://lion-penguin-api.alicja-kowalska1996.workers.dev";
 
 
 async function sendEvent(data) {
