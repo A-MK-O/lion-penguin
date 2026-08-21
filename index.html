@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Lion & Penguin</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+
+  <main>
+
+    <h1>Lion & Penguin</h1>
+
+    <div id="world">
+
+      <div class="pet selected" id="lion" data-pet="lion">
+        <div class="pet-sprite">🦁</div>
+        <div class="pet-name">Lion</div>
+      </div>
+
+      <div class="pet" id="penguin" data-pet="penguin">
+        <div class="pet-sprite">🐧</div>
+        <div class="pet-name">Penguin</div>
+      </div>
+
+    </div>
+
+
+    <section id="controls">
+
+      <h2>
+        Selected:
+        <span id="selected-name">Lion</span>
+      </h2>
+
+      <div class="buttons">
+
+        <button data-action="treat">
+          🍬 Sweet treat
+        </button>
+
+        <button data-action="workout">
+          🏋️ Work out
+        </button>
+
+        <button data-action="email">
+          💻 Write emails
+        </button>
+
+        <button data-action="pet">
+          💕 Pet
+        </button>
+
+      </div>
+
+      <button id="love-letter">
+        💌 Lion → Penguin
+      </button>
+
+      <p id="status">
+        Lion and Penguin are hanging out.
+      </p>
+
+    </section>
+
+  </main>
+
+</body>
+</html>
