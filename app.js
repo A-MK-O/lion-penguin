@@ -418,52 +418,54 @@ loveLetterButton.addEventListener(
 );
 
 
-async function lionVisitsPenguin() {
+async function petVisitsPet(visitorName, targetName) {
 
   if (
-    busyPets.has("lion") ||
-    busyPets.has("penguin")
+    busyPets.has(visitorName) ||
+    busyPets.has(targetName)
   ) {
     return;
   }
 
-  busyPets.add("lion");
-  busyPets.add("penguin");
+  busyPets.add(visitorName);
+  busyPets.add(targetName);
 
-  clearTimeout(roamTimers.lion);
-  clearTimeout(roamTimers.penguin);
+  clearTimeout(roamTimers[visitorName]);
+  clearTimeout(roamTimers[targetName]);
 
-  const lion = pets.lion;
-  const penguin = pets.penguin;
+  const visitor = pets[visitorName];
+  const target = pets[targetName];
 
   const worldRect =
     world.getBoundingClientRect();
 
-  const penguinRect =
-    penguin.getBoundingClientRect();
+  const targetRect =
+    target.getBoundingClientRect();
 
-  const lionWidth =
-    lion.offsetWidth;
+  const visitorWidth =
+    visitor.offsetWidth;
 
-  const lionHeight =
-    lion.offsetHeight;
+  const visitorHeight =
+    visitor.offsetHeight;
+
 
   let targetX =
-    penguinRect.left
+    targetRect.left
     - worldRect.left
-    - lionWidth
+    - visitorWidth
     + 25;
 
   let targetY =
-    penguinRect.top
+    targetRect.top
     - worldRect.top;
+
 
   targetX =
     Math.max(
       0,
       Math.min(
         targetX,
-        world.clientWidth - lionWidth
+        world.clientWidth - visitorWidth
       )
     );
 
@@ -472,15 +474,17 @@ async function lionVisitsPenguin() {
       0,
       Math.min(
         targetY,
-        world.clientHeight - lionHeight
+        world.clientHeight - visitorHeight
       )
     );
 
-  lion.style.transitionDuration =
+
+  visitor.style.transitionDuration =
     "2s";
 
-  lion.style.transform =
+  visitor.style.transform =
     `translate(${targetX}px, ${targetY}px)`;
+
 
   await wait(2100);
 
@@ -488,68 +492,45 @@ async function lionVisitsPenguin() {
 
   await wait(3000);
 
-  busyPets.delete("lion");
-  busyPets.delete("penguin");
 
-  movePetRandomly("lion");
-  movePetRandomly("penguin");
+  busyPets.delete(visitorName);
+  busyPets.delete(targetName);
+
+  movePetRandomly(visitorName);
+  movePetRandomly(targetName);
 }
 
 
-function showHeartBetweenPets() {
+function schedulePetVisit() {
 
-  const lionRect =
-    pets.lion.getBoundingClientRect();
+  const delay =
+    10000 + Math.random() * 10000;
 
-  const penguinRect =
-    pets.penguin.getBoundingClientRect();
+  setTimeout(async () => {
 
-  const worldRect =
-    world.getBoundingClientRect();
+    const lionVisits =
+      Math.random() < 0.5;
 
-  const heart =
-    document.createElement("div");
+    if (lionVisits) {
 
-  heart.className =
-    "meeting-heart";
+      await petVisitsPet(
+        "lion",
+        "penguin"
+      );
 
-  heart.textContent =
-    "❤️";
+    } else {
 
-  const middleX =
-    (
-      lionRect.left
-      + lionRect.width / 2
-      + penguinRect.left
-      + penguinRect.width / 2
-    ) / 2
-    - worldRect.left;
+      await petVisitsPet(
+        "penguin",
+        "lion"
+      );
 
-  const middleY =
-    Math.min(
-      lionRect.top,
-      penguinRect.top
-    )
-    - worldRect.top
-    - 20;
+    }
 
-  heart.style.left =
-    `${middleX}px`;
+    schedulePetVisit();
 
-  heart.style.top =
-    `${middleY}px`;
-
-  world.appendChild(heart);
-
-  setTimeout(
-    () => heart.remove(),
-    2500
-  );
+  }, delay);
 }
 
 
-function wait(ms) {
-  return new Promise(
-    resolve => setTimeout(resolve, ms)
-  );
-}
+schedulePetVisit();
