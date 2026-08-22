@@ -382,15 +382,3 @@ main {
 
 }
 
-
-
-body[data-app-loaded="yes"]::before {
-  content: "JS WORKING";
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 9999;
-  background: lime;
-  color: black;
-  padding: 8px;
-}
