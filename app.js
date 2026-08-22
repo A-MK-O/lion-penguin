@@ -1,3 +1,6 @@
+console.log("APP STARTED");
+document.body.dataset.appLoaded = "yes";
+
 // ==================================================
 // BASIC ELEMENTS
 // ==================================================
