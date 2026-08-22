@@ -1,70 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Lion & Penguin</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Lion Boy & Penguin</title>
 
   <link rel="stylesheet" href="styles.css">
 
   <script src="app.js" defer></script>
 </head>
 
+
 <body>
 
   <main>
 
-    <h1>Lion & Penguin</h1>
+    <!-- YOUR DRAWN SIGN / TITLE -->
+
+    <div id="sign">
+      <img
+        src="images/sign.png"
+        alt="Lion Boy and Penguin"
+      >
+    </div>
+
+
+    <!-- PET WORLD -->
 
     <div id="world">
 
-      <div class="pet selected" id="lion" data-pet="lion">
-        <div class="pet-sprite">🦁</div>
-        <div class="pet-name">Lion</div>
+
+      <!-- LION -->
+
+      <div
+        class="pet selected"
+        id="lion"
+        data-pet="lion"
+      >
+
+        <img
+          class="pet-image"
+          id="lion-image"
+          src="images/lion-idle-1.png"
+          alt="Lion Boy"
+        >
+
       </div>
 
-      <div class="pet" id="penguin" data-pet="penguin">
-        <div class="pet-sprite">🐧</div>
-        <div class="pet-name">Penguin</div>
+
+      <!-- PENGUIN -->
+
+      <div
+        class="pet"
+        id="penguin"
+        data-pet="penguin"
+      >
+
+        <img
+          class="pet-image"
+          id="penguin-image"
+          src="images/penguin-idle-1.png"
+          alt="Penguin"
+        >
+
       </div>
+
+
+      <!-- YOUR FRAME IS ABOVE THE PETS -->
+
+      <img
+        id="world-frame"
+        src="images/frame.png"
+        alt=""
+      >
 
     </div>
 
 
-    <section id="controls">
+    <!-- BUTTONS -->
 
-      <h2>
-        Selected:
-        <span id="selected-name">Lion</span>
-      </h2>
+    <section id="controls">
 
       <div class="buttons">
 
-        <button data-action="treat">
-          🍬 Sweet treat
+
+        <button
+          class="image-button"
+          data-action="treat"
+          aria-label="Give a sweet treat"
+        >
+
+          <img
+            src="images/button-treat.png"
+            alt="Sweet treat"
+          >
+
         </button>
 
-        <button data-action="workout">
-          🏋️ Work out
+
+        <button
+          class="image-button"
+          data-action="workout"
+          aria-label="Work out"
+        >
+
+          <img
+            src="images/button-workout.png"
+            alt="Work out"
+          >
+
         </button>
 
-        <button data-action="email">
-          💻 Write emails
+
+        <button
+          class="image-button"
+          data-action="email"
+          aria-label="Write emails"
+        >
+
+          <img
+            src="images/button-email.png"
+            alt="Write emails"
+          >
+
         </button>
 
-        <button data-action="pet">
-          💕 Pet
+
+        <button
+          class="image-button"
+          data-action="pet"
+          aria-label="Glasc"
+        >
+
+          <img
+            src="images/button-glasc.png"
+            alt="Glasc"
+          >
+
+        </button>
+
+
+        <button
+          class="image-button"
+          id="love-letter"
+          aria-label="Send a love letter"
+        >
+
+          <!--
+            Lion is selected initially,
+            therefore this letter is TO Penguin.
+          -->
+
+          <img
+            id="love-letter-button-image"
+            src="images/button-letter-P.png"
+            alt="Send Penguin a love letter"
+          >
+
         </button>
 
       </div>
 
-      <button id="love-letter">
-        💌 Lion → Penguin
-      </button>
+
+      <!-- We keep this for useful feedback.
+           You can hide it later if your design
+           doesn't need text here. -->
 
       <p id="status">
-        Lion and Penguin are hanging out.
+        Lion Boy and Penguin are hanging out.
       </p>
 
     </section>
@@ -72,4 +181,5 @@
   </main>
 
 </body>
+
 </html>
