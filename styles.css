@@ -256,6 +256,15 @@ main {
     transform 0.12s ease;
 }
 
+button[data-action="pet"] img {
+  width: 120px;
+}
+
+
+#love-letter-button-image {
+  width: 210px;
+}
+
 
 .image-button:hover img {
   transform:
