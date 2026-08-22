@@ -2,94 +2,190 @@
   box-sizing: border-box;
 }
 
+
+/* --------------------------------
+   PAGE
+-------------------------------- */
+
 body {
   margin: 0;
   min-height: 100vh;
 
-  font-family: Arial, sans-serif;
-
   background: #f4f1ea;
-  color: #222;
 }
+
 
 main {
-  width: min(1000px, 94vw);
-  margin: 30px auto;
+  width: min(1000px, 96vw);
+
+  margin:
+    25px auto
+    40px auto;
 }
 
-h1 {
-  text-align: center;
+
+/* --------------------------------
+   DRAWN SIGN
+-------------------------------- */
+
+#sign {
+  display: flex;
+
+  justify-content: center;
+
+  margin-bottom: 10px;
 }
 
 
-/* ------------------------------
-   THE PET WORLD
+#sign img {
+  display: block;
+
+  width: min(700px, 90%);
+
+  height: auto;
+}
+
+
+/* --------------------------------
+   PET WORLD
 -------------------------------- */
 
 #world {
   position: relative;
 
   width: 100%;
+
+  /*
+    You can change this later
+    depending on the proportions
+    of frame.png.
+  */
+
   height: 560px;
 
   overflow: hidden;
 
-  border: 3px solid #222;
-  border-radius: 20px;
+  /*
+    Temporary background.
+    If your frame contains the
+    whole background, you can
+    change/remove this later.
+  */
 
-  background:
-    linear-gradient(
-      to bottom,
-      #dff3ff 0%,
-      #dff3ff 65%,
-      #dce8c4 65%,
-      #dce8c4 100%
-    );
+  background: #ffffff;
 }
 
 
-/* ------------------------------
+/* --------------------------------
+   DRAWN FRAME
+-------------------------------- */
+
+#world-frame {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  /*
+    Change to "contain" if your
+    frame should never be cropped.
+  */
+
+  object-fit: fill;
+
+  z-index: 20;
+
+  /*
+    IMPORTANT:
+    clicks pass THROUGH the frame
+    so pets remain clickable.
+  */
+
+  pointer-events: none;
+
+  user-select: none;
+}
+
+
+/* --------------------------------
    PETS
 -------------------------------- */
 
 .pet {
   position: absolute;
+
   top: 0;
   left: 0;
 
-  width: 110px;
+  /*
+    This controls approximately
+    how much space each pet occupies.
+  */
 
-  text-align: center;
+  width: 150px;
+  height: 150px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 
   cursor: pointer;
 
+  z-index: 10;
+
   user-select: none;
 
-  transition: transform 3s linear;
-}
-
-.pet-sprite {
-  font-size: 72px;
-
-  transform-origin: center bottom;
-}
-
-.pet-name {
-  display: inline-block;
-
-  padding: 3px 8px;
-
-  border-radius: 10px;
-
-  background: rgba(255,255,255,0.8);
-}
-
-.pet.selected .pet-name {
-  outline: 3px solid #222;
+  transition:
+    transform 3s linear;
 }
 
 
-/* ------------------------------
+.pet-image {
+  display: block;
+
+  /*
+    Change this if your drawings
+    should appear larger/smaller.
+  */
+
+  width: 140px;
+
+  max-width: 100%;
+  max-height: 100%;
+
+  height: auto;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
+}
+
+
+/*
+  Small indication of which pet
+  is selected.
+
+  You can REMOVE this entire rule
+  later if you don't want selection
+  shown visually.
+*/
+
+.pet.selected {
+  filter:
+    drop-shadow(
+      0 0 5px
+      rgba(0, 0, 0, 0.25)
+    );
+}
+
+
+/* --------------------------------
    CONTROLS
 -------------------------------- */
 
@@ -99,194 +195,189 @@ h1 {
   text-align: center;
 }
 
+
 .buttons {
   display: flex;
+
   justify-content: center;
+
+  align-items: center;
+
   flex-wrap: wrap;
 
   gap: 10px;
-
-  margin-bottom: 15px;
 }
 
-button {
-  padding: 10px 16px;
 
-  border: 2px solid #222;
-  border-radius: 12px;
+/* --------------------------------
+   DRAWN BUTTONS
+-------------------------------- */
 
-  background: white;
+.image-button {
+  /*
+    Remove normal browser button
+    appearance.
+  */
 
-  font-size: 16px;
+  padding: 0;
+
+  margin: 0;
+
+  border: 0;
+
+  background: transparent;
 
   cursor: pointer;
 }
 
-button:hover {
-  transform: translateY(-2px);
+
+.image-button img {
+  display: block;
+
+  /*
+    Adjust this when you see your
+    buttons on the real page.
+  */
+
+  width: 150px;
+
+  max-width: 30vw;
+
+  height: auto;
+
+  transition:
+    transform 0.12s ease;
 }
 
-#love-letter {
-  margin-top: 5px;
+
+.image-button:hover img {
+  transform:
+    translateY(-2px);
 }
 
 
-/* ------------------------------
-   ACTION ANIMATIONS
+.image-button:active img {
+  transform:
+    translateY(1px)
+    scale(0.97);
+}
+
+
+/* --------------------------------
+   STATUS TEXT
 -------------------------------- */
 
-.pet.action-treat .pet-sprite {
-  animation: bounce 0.4s 3;
-}
+#status {
+  margin-top: 15px;
 
-.pet.action-workout .pet-sprite {
-  animation: workout 0.35s 5;
-}
+  min-height: 24px;
 
-.pet.action-email .pet-sprite {
-  animation: typing 0.2s infinite alternate;
-}
+  font-family:
+    Arial,
+    sans-serif;
 
-.pet.action-pet .pet-sprite {
-  animation: happy 0.5s 3;
+  font-size: 15px;
 }
 
 
-/* little objects appearing above pet */
-
-.pet.action-treat::after {
-  content: "🍬";
-}
-
-.pet.action-workout::after {
-  content: "🏋️";
-}
-
-.pet.action-email::after {
-  content: "💻";
-}
-
-.pet.action-pet::after {
-  content: "💗";
-}
-
-.pet::after {
-  position: absolute;
-
-  top: -20px;
-  left: 50%;
-
-  font-size: 30px;
-
-  transform: translateX(-50%);
-}
-
-
-/* ------------------------------
-   LOVE LETTER
+/* --------------------------------
+   FLYING DRAWN ENVELOPE
 -------------------------------- */
 
 .flying-letter {
   position: absolute;
 
-  z-index: 20;
+  z-index: 30;
 
-  font-size: 32px;
+  width: 60px;
+  height: 60px;
 
   pointer-events: none;
 
+  transform:
+    translate(-50%, -50%);
+
   transition:
-    transform 1.3s ease-in-out,
-    opacity 1.3s;
+    left 1.5s ease-in-out,
+    top 1.5s ease-in-out;
 }
 
 
-/* ------------------------------
-   KEYFRAMES
+.flying-letter img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+
+/* --------------------------------
+   DRAWN HEART
 -------------------------------- */
-
-@keyframes bounce {
-
-  50% {
-    transform: translateY(-20px);
-  }
-
-}
-
-@keyframes workout {
-
-  0% {
-    transform: rotate(-8deg);
-  }
-
-  100% {
-    transform: rotate(8deg);
-  }
-
-}
-
-@keyframes typing {
-
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-5px);
-  }
-
-}
-
-@keyframes happy {
-
-  0% {
-    transform: rotate(0);
-  }
-
-  25% {
-    transform: rotate(-10deg);
-  }
-
-  75% {
-    transform: rotate(10deg);
-  }
-
-  100% {
-    transform: rotate(0);
-  }
-
-}
-
 
 .meeting-heart {
   position: absolute;
+
   z-index: 30;
 
-  font-size: 30px;
-
-  transform: translateX(-50%);
+  width: 65px;
+  height: 65px;
 
   pointer-events: none;
 
-  animation: heart-pop 0.5s ease;
+  transform:
+    translate(-50%, -50%);
 }
 
-@keyframes heart-pop {
-  0% {
-    transform:
-      translateX(-50%)
-      scale(0);
+
+.meeting-heart img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+
+/* --------------------------------
+   MOBILE
+-------------------------------- */
+
+@media (max-width: 600px) {
+
+  #world {
+    height: 450px;
   }
 
-  70% {
-    transform:
-      translateX(-50%)
-      scale(1.3);
+
+  .pet {
+    width: 110px;
+    height: 110px;
   }
 
-  100% {
-    transform:
-      translateX(-50%)
-      scale(1);
+
+  .pet-image {
+    width: 105px;
   }
+
+
+  .image-button img {
+    width: 120px;
+  }
+
+
+  .flying-letter {
+    width: 50px;
+    height: 50px;
+  }
+
+
+  .meeting-heart {
+    width: 55px;
+    height: 55px;
+  }
+
 }
