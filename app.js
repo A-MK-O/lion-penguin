@@ -1,5 +1,3 @@
-console.log("APP STARTED");
-document.body.dataset.appLoaded = "yes";
 
 const world = document.querySelector("#world");
 
