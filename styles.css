@@ -227,7 +227,7 @@ main {
 -------------------------------- */
 
 button[data-action="pet"] img {
-  width: 120px;
+  width: 100px;
 }
 
 
@@ -237,7 +237,7 @@ button[data-action="pet"] img {
 -------------------------------- */
 
 #love-letter-button-image {
-  width: 210px;
+  width: 250px;
 }
 
 
